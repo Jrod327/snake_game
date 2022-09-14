@@ -1,35 +1,26 @@
-import turtle
-from turtle import Turtle, Screen
+from turtle import Screen
+from snake import Snake
+import time
 
 screen = Screen()
 screen.setup(width=600, height=600)
 screen.bgcolor("black")
 screen.title("Jarod's Snake Game")
+screen.tracer(0)
 
-snake = []
-x_pos = [0, -20, -40]
-
-
-def move_snake():
-    for i in range(len(snake)):
-        screen.tracer(25)
-        snake[i].forward(2)
-
-
-
-for i in range(0, 3):
-    snake_piece = Turtle()
-    snake_piece.penup()
-    snake_piece.shape("square")
-    snake_piece.color("white")
-    snake_piece.goto(x=x_pos[i], y=0)
-    snake.append(snake_piece)
-print(snake)
+snake = Snake()
 
 screen.listen()
-screen.onkeypress(fun=move_snake, key="w")
+screen.onkey(snake.up, "Up")
+screen.onkey(snake.down, "Down")
+screen.onkey(snake.left, "Left")
+screen.onkey(snake.right, "Right")
 
-#look up tracer method
+game_is_on = True
+while game_is_on:
+    screen.update()
+    time.sleep(0.1)
+    snake.move()
 
 # TODO 1: Create snake body
 # TODO 2: Move the snake
@@ -38,11 +29,5 @@ screen.onkeypress(fun=move_snake, key="w")
 # TODO 5: Create a scoreboard
 # TODO 6: Detect collision with wall
 # TODO 7: Detect collision with self
-
-
-
-
-
-
 
 screen.exitonclick()
