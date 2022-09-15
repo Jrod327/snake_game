@@ -48,7 +48,7 @@ def new_game():
         for i in snake.segments:
             if i == snake.head:
                 pass
-            elif snake.head.distance(i) < 1:
+            elif snake.head.distance(i) < 5:
                 game_is_on = False
                 scoreboard.game_over()
 
