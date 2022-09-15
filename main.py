@@ -1,33 +1,57 @@
 from turtle import Screen
 from snake import Snake
+from food import Food
+from scoreboard import ScoreBoard
+import sys
 import time
 
 screen = Screen()
-screen.setup(width=600, height=600)
-screen.bgcolor("black")
-screen.title("Jarod's Snake Game")
-screen.tracer(0)
 
-snake = Snake()
 
-screen.listen()
-screen.onkey(snake.up, "Up")
-screen.onkey(snake.down, "Down")
-screen.onkey(snake.left, "Left")
-screen.onkey(snake.right, "Right")
+def new_game():
+    screen.clear()
+    snake = Snake()
+    food = Food()
+    scoreboard = ScoreBoard()
 
-game_is_on = True
-while game_is_on:
-    screen.update()
-    time.sleep(0.1)
-    snake.move()
+    screen.setup(width=600, height=600)
+    screen.bgcolor("black")
+    screen.title("Jarod's Snake Game")
+    screen.tracer(0)
 
-# TODO 1: Create snake body
-# TODO 2: Move the snake
-# TODO 3: Create snake food
-# TODO 4: Detect collision with food
-# TODO 5: Create a scoreboard
-# TODO 6: Detect collision with wall
-# TODO 7: Detect collision with self
+    screen.listen()
+    screen.onkey(snake.up, "Up")
+    screen.onkey(snake.down, "Down")
+    screen.onkey(snake.left, "Left")
+    screen.onkey(snake.right, "Right")
+    screen.onkey(new_game, "r")
+    screen.onkey(sys.exit, "q")
 
+    game_is_on = True
+    while game_is_on:
+        screen.update()
+        time.sleep(0.1)
+        snake.move()
+
+        # Detect collision with food.
+        if snake.head.distance(food) < 20:
+            snake.extend()
+            food.refresh()
+            scoreboard.increase_score()
+
+        # Detect collision with wall
+        if snake.head.xcor() > 300 or snake.head.xcor() < -300 or snake.head.ycor() > 300 or snake.head.ycor() < -300:
+            game_is_on = False
+            scoreboard.game_over()
+
+        # Detect collision with tail
+        for i in snake.segments:
+            if i == snake.head:
+                pass
+            elif snake.head.distance(i) < 1:
+                game_is_on = False
+                scoreboard.game_over()
+
+
+new_game()
 screen.exitonclick()
